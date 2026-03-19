@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>RNA — Repositories Needing Attention</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=DM+Sans:ital,wght@0,400;0,500;0,700;1,400&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #0e1117;
+      --surface: #161b22;
+      --surface-hover: #1c2129;
+      --border: #30363d;
+      --text: #e6edf3;
+      --text-muted: #8b949e;
+      --accent: #58a6ff;
+      --accent-dim: #1f6feb33;
+      --red: #f85149;
+      --orange: #d29922;
+      --green: #3fb950;
+      --purple: #bc8cff;
+      --pink: #f778ba;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'DM Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+      min-height: 100vh;
+    }
+
+    .grain {
+      position: fixed; inset: 0; z-index: 0; pointer-events: none; opacity: 0.03;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+    }
+
+    .container { max-width: 960px; margin: 0 auto; padding: 0 24px; position: relative; z-index: 1; }
+
+    header {
+      padding: 80px 0 48px;
+      text-align: center;
+      border-bottom: 1px solid var(--border);
+      margin-bottom: 48px;
+    }
+
+    .logo {
+      font-family: 'DM Mono', monospace;
+      font-size: 4rem;
+      font-weight: 500;
+      letter-spacing: 0.15em;
+      background: linear-gradient(135deg, var(--accent), var(--purple));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin-bottom: 12px;
+    }
+
+    .tagline {
+      font-size: 1.15rem;
+      color: var(--text-muted);
+      font-weight: 400;
+    }
+
+    .tagline span {
+      color: var(--text);
+      font-weight: 500;
+    }
+
+    .stats-bar {
+      display: flex;
+      justify-content: center;
+      gap: 32px;
+      margin-top: 28px;
+      flex-wrap: wrap;
+    }
+
+    .stat {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.9rem;
+      color: var(--text-muted);
+    }
+
+    .stat-dot {
+      width: 10px; height: 10px;
+      border-radius: 50%;
+      display: inline-block;
+    }
+
+    .stat-count {
+      font-family: 'DM Mono', monospace;
+      font-weight: 500;
+      color: var(--text);
+    }
+
+    .filter-bar {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 32px;
+      flex-wrap: wrap;
+    }
+
+    .filter-btn {
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.85rem;
+      padding: 6px 14px;
+      border-radius: 20px;
+      border: 1px solid var(--border);
+      background: transparent;
+      color: var(--text-muted);
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .filter-btn:hover { border-color: var(--accent); color: var(--text); }
+    .filter-btn.active { background: var(--accent-dim); border-color: var(--accent); color: var(--accent); }
+
+    .repo-list { display: flex; flex-direction: column; gap: 12px; padding-bottom: 80px; }
+
+    .repo-card {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 12px 24px;
+      padding: 20px 24px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      transition: all 0.2s;
+      text-decoration: none;
+      color: inherit;
+    }
+
+    .repo-card:hover {
+      border-color: var(--accent);
+      background: var(--surface-hover);
+      transform: translateY(-1px);
+      box-shadow: 0 4px 24px rgba(0,0,0,0.3);
+    }
+
+    .repo-name {
+      font-family: 'DM Mono', monospace;
+      font-size: 1.05rem;
+      font-weight: 500;
+      color: var(--accent);
+    }
+
+    .repo-owner {
+      color: var(--text-muted);
+      font-weight: 400;
+    }
+
+    .repo-desc {
+      grid-column: 1 / -1;
+      color: var(--text-muted);
+      font-size: 0.92rem;
+      line-height: 1.5;
+    }
+
+    .repo-meta {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      justify-self: end;
+      align-self: start;
+    }
+
+    .tag {
+      font-size: 0.75rem;
+      font-weight: 500;
+      padding: 3px 10px;
+      border-radius: 12px;
+      white-space: nowrap;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+
+    .tag-stale        { background: #d2992233; color: var(--orange); }
+    .tag-needs-review  { background: #f8514933; color: var(--red); }
+    .tag-needs-docs    { background: #bc8cff33; color: var(--purple); }
+    .tag-needs-update  { background: #58a6ff33; color: var(--accent); }
+    .tag-needs-tests   { background: #f778ba33; color: var(--pink); }
+    .tag-archived      { background: #8b949e22; color: var(--text-muted); }
+
+    .empty-state {
+      text-align: center;
+      padding: 64px 24px;
+      color: var(--text-muted);
+      font-size: 1rem;
+    }
+
+    footer {
+      text-align: center;
+      padding: 32px 0;
+      color: var(--text-muted);
+      font-size: 0.82rem;
+      border-top: 1px solid var(--border);
+    }
+
+    footer a { color: var(--accent); text-decoration: none; }
+    footer a:hover { text-decoration: underline; }
+
+    @media (max-width: 600px) {
+      header { padding: 48px 0 32px; }
+      .logo { font-size: 2.8rem; }
+      .repo-card { grid-template-columns: 1fr; }
+      .repo-meta { justify-self: start; }
+      .stats-bar { gap: 16px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="grain"></div>
+  <div class="container">
+    <header>
+      <div class="logo">RNA</div>
+      <p class="tagline"><span>R</span>epositories <span>N</span>eeding <span>A</span>ttention</p>
+      <div class="stats-bar" id="stats-bar"></div>
+    </header>
+
+    <div class="filter-bar" id="filter-bar"></div>
+    <div class="repo-list" id="repo-list"></div>
+
+    <footer>
+      Maintained by <a href="https://github.com/RobertsLab">RobertsLab</a> &middot;
+      <a href="https://github.com/RobertsLab/RNA">Edit on GitHub</a>
+    </footer>
+  </div>
+
+<script>
+// ============================================================
+//  REPO DATA — Edit this array to update the landing page.
+//
+//  Each entry needs:
+//    owner  — GitHub org or username
+//    name   — repo name
+//    desc   — short description of what needs attention
+//    tags   — array of: "stale", "needs-review", "needs-docs",
+//             "needs-update", "needs-tests", "archived"
+//    url    — (optional) full URL, defaults to github.com/owner/name
+// ============================================================
+const REPOS = [
+  {
+    owner: "RobertsLab",
+    name: "project-cod-temperature",
+    desc: "Pacific cod temperature experiment — analysis notebooks need updating after recent data additions.",
+    tags: ["needs-update"]
+  },
+  {
+    owner: "RobertsLab",
+    name: "resources",
+    desc: "Lab resources and onboarding docs — several sections are outdated and need a refresh.",
+    tags: ["needs-docs", "stale"]
+  },
+  {
+    owner: "RobertsLab",
+    name: "tusk",
+    desc: "Geoduck genome project — stale branches and open PRs need review or closure.",
+    tags: ["stale", "needs-review"]
+  },
+  {
+    owner: "sr320",
+    name: "course-fish546-2025",
+    desc: "FISH 546 course materials — tests and CI pipeline need attention before next quarter.",
+    tags: ["needs-tests"]
+  }
+];
+
+// ============================================================
+//  TAG CONFIG
+// ============================================================
+const TAG_META = {
+  "stale":        { label: "Stale",        color: "#d29922" },
+  "needs-review": { label: "Needs Review", color: "#f85149" },
+  "needs-docs":   { label: "Needs Docs",   color: "#bc8cff" },
+  "needs-update": { label: "Needs Update", color: "#58a6ff" },
+  "needs-tests":  { label: "Needs Tests",  color: "#f778ba" },
+  "archived":     { label: "Archived",     color: "#8b949e" }
+};
+
+// ============================================================
+//  RENDER
+// ============================================================
+let activeFilter = "all";
+
+function repoUrl(r) {
+  return r.url || `https://github.com/${r.owner}/${r.name}`;
+}
+
+function renderStats() {
+  const counts = {};
+  REPOS.forEach(r => r.tags.forEach(t => { counts[t] = (counts[t] || 0) + 1; }));
+  const bar = document.getElementById("stats-bar");
+  bar.innerHTML = `<div class="stat"><span class="stat-count">${REPOS.length}</span> repos tracked</div>`;
+  Object.entries(counts).sort((a,b) => b[1]-a[1]).forEach(([tag, count]) => {
+    const m = TAG_META[tag];
+    bar.innerHTML += `<div class="stat"><span class="stat-dot" style="background:${m.color}"></span><span class="stat-count">${count}</span> ${m.label.toLowerCase()}</div>`;
+  });
+}
+
+function renderFilters() {
+  const tags = [...new Set(REPOS.flatMap(r => r.tags))];
+  const bar = document.getElementById("filter-bar");
+  bar.innerHTML = `<button class="filter-btn active" data-filter="all">All</button>`;
+  tags.forEach(t => {
+    bar.innerHTML += `<button class="filter-btn" data-filter="${t}">${TAG_META[t].label}</button>`;
+  });
+  bar.querySelectorAll(".filter-btn").forEach(btn => {
+    btn.addEventListener("click", () => {
+      activeFilter = btn.dataset.filter;
+      bar.querySelectorAll(".filter-btn").forEach(b => b.classList.remove("active"));
+      btn.classList.add("active");
+      renderList();
+    });
+  });
+}
+
+function renderList() {
+  const list = document.getElementById("repo-list");
+  const filtered = activeFilter === "all"
+    ? REPOS
+    : REPOS.filter(r => r.tags.includes(activeFilter));
+
+  if (filtered.length === 0) {
+    list.innerHTML = `<div class="empty-state">No repositories match this filter.</div>`;
+    return;
+  }
+
+  list.innerHTML = filtered.map(r => `
+    <a class="repo-card" href="${repoUrl(r)}" target="_blank" rel="noopener">
+      <div class="repo-name"><span class="repo-owner">${r.owner} /</span> ${r.name}</div>
+      <div class="repo-meta">
+        ${r.tags.map(t => `<span class="tag tag-${t}">${TAG_META[t].label}</span>`).join("")}
+      </div>
+      <div class="repo-desc">${r.desc}</div>
+    </a>
+  `).join("");
+}
+
+renderStats();
+renderFilters();
+renderList();
+</script>
+</body>
+</html>
