@@ -183,7 +183,7 @@
     .tag-needs-review  { background: #f8514933; color: var(--red); }
     .tag-needs-docs    { background: #bc8cff33; color: var(--purple); }
     .tag-needs-update  { background: #58a6ff33; color: var(--accent); }
-    .tag-needs-tests   { background: #f778ba33; color: var(--pink); }
+    .tag-priority   { background: #f778ba33; color: var(--pink); }
     .tag-archived      { background: #8b949e22; color: var(--text-muted); }
 
     .empty-state {
@@ -240,7 +240,7 @@
 //    name   — repo name
 //    desc   — short description of what needs attention
 //    tags   — array of: "stale", "needs-review", "needs-docs",
-//             "needs-update", "needs-tests", "archived"
+//             "needs-update", "priority", "archived"
 //    url    — (optional) full URL, defaults to github.com/owner/name
 // ============================================================
 const REPOS = [
@@ -258,9 +258,9 @@ const REPOS = [
   },
   {
     owner: "RobertsLab",
-    name: "tusk",
-    desc: "Geoduck genome project — stale branches and open PRs need review or closure.",
-    tags: ["stale", "needs-review"]
+    name: "project-lake-trout",
+    desc: "Lake trout DNA methylation and PAV",
+    tags: ["stale", "priority"]
   },
   {
     owner: "sr320",
