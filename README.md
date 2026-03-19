@@ -2,7 +2,7 @@
 
 A landing page that tracks GitHub repositories needing attention across the [RobertsLab](https://github.com/RobertsLab) organization.
 
-**Live site:** Enable [GitHub Pages](https://docs.github.com/en/pages) in repo settings (Settings → Pages → Source: Deploy from branch, Branch: `main`, Folder: `/ (root)`).
+**Live site:** https://robertslab.github.io/RNA/
 
 ## How to update the repo list
 
