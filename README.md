@@ -25,7 +25,7 @@ All data lives in the `REPOS` array near the top of `index.html`. Each entry loo
 | `needs-review` | Open PRs or branches waiting for review |
 | `needs-docs` | Documentation is missing or outdated |
 | `needs-update` | Code or analysis needs updating |
-| `needs-tests` | Tests or CI pipeline need work |
+| `priority` | High priority, needs immediate attention |
 | `archived` | Marked for archive, shown as dimmed |
 
 Edit the array, commit, and the page updates automatically.
